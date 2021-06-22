@@ -134,7 +134,7 @@
                         this.cartListBlock.insertAdjacentHTML(where: 'beforeend', this.cartItem.render(box));
 
                     });
-                    this.cartListBlock.insertAdjacentHTML(where: 'beforeend', html: `в корзине ${this.box.length} товаров стоимостью ${this.box.price}`);
+                    this.cartListBlock.insertAdjacentHTML(where: 'beforeend', html: `в корзине ${this.box.length} товаров стоимостью ${this.box.getCartPrice}`);
                 } else {
                     this.cartListBlock.textContent = 'Корзина пуста';
                 }
