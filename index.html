@@ -8,7 +8,150 @@
 </head>
 
 <body>
+    <script>
+        /*
+        1. Создать функцию, генерирующую шахматную доску. 
+        При этом можно использовать любые html-теги по своему желанию. 
+        Доска должна быть разлинована соответствующим образом, т.е. чередовать черные и белые ячейки. 
+        Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H.
+        */
 
+        function draw() {
+            var table = document.createElement('table');
+            var flag = true;
+
+            var trr = document.createElement('tr');
+            var arr = [' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+            //генерим ячейки
+            for (var i = 0; i < 8; i++) {
+                var tr = document.createElement('tr');
+
+                //создаем ячейку для цифр
+                var tdd = document.createElement('td');
+                tdd.style.width = '50px';
+                tdd.style.height = '50px';
+                tdd.style.textAlign = 'right';
+                tdd.innerHTML = 8 - i;
+                tr.appendChild(tdd);
+
+                for (var j = 0; j < 8; j++) {
+
+                    if (j == 0)
+                        flag = !flag;
+
+                    var td = document.createElement('td');
+
+                    td.style.width = '50px';
+                    td.style.height = '50px';
+                    if (flag) {
+                        td.style.background = 'black';
+                    } else
+                        td.style.background = 'white';
+
+                    tr.appendChild(td);
+                    flag = !flag;
+                }
+                table.appendChild(tr);
+            }
+
+            //генерим буквы
+            for (var k = 0; k < 9; k++) {
+
+                var td = document.createElement('td');
+                td.style.width = '50px';
+                td.style.height = '50px';
+                td.style.textAlign = 'center';
+                td.style.verticalAlign = 'top';
+                td.style.background = 'white';
+                td.innerHTML = arr[k];
+
+                trr.appendChild(td);
+
+            }
+            table.appendChild(trr);
+
+            document.body.appendChild(table);
+        }
+
+        draw();
+    </script>
+
+
+
+
+    <script>
+        /*
+        2. Сделать генерацию корзины динамической: верстка корзины не должна находиться в HTML-структуре. 
+        Там должен быть только div, в который будет вставляться корзина, сгенерированная на базе JS:
+2.1. Пустая корзина должна выводить строку «Корзина пуста»;
+2.2. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+        */
+        const cartItem = {
+            render(box) {
+                return <div class="box">
+                    <div><b>Наименование</b>: ${box.item}</div>
+                    <div><b>Цена</b>: ${box.price}</div>
+                    <div><b>Количество</b>: ${box.count}</div>
+                    <div><b>Cтоимость</b>: ${box.count * box.price}</div>
+                </div>
+            }
+        }
+
+        const cart = {
+            cartListBlock: null,
+            cartButton: null,
+            cartItem,
+            box: [
+                {
+                    id: 1,
+                    item: 'item1',
+                    price: 100,
+                    count: 5,
+                },
+                {
+                    id: 2,
+                    item: 'item2',
+                    price: 200,
+                    count: 10,
+                },
+                {
+                    id: 3,
+                    item: 'item2',
+                    price: 300,
+                    count: 15,
+                },
+            ],
+            init() {
+                this.cartListBlock = document.querySelector(selectors: '.cart-list');
+                this.cartButton = document.querySelector(selectors: '.cart-button');
+                this.cartButton.addEventListener('click', this.clearCart.bind(this));
+                this.render();
+            },
+            render() {
+                if (this.box.length) {
+                    this.box.forEach(box => {
+                        this.cartListBlock.insertAdjacentHTML(where: 'beforeend', this.cartItem.render(box));
+
+                    });
+                    this.cartListBlock.insertAdjacentHTML(where: 'beforeend', html: `в корзине ${this.box.length} товаров стоимостью ${this.box.price}`);
+                } else {
+                    this.cartListBlock.textContent = 'Корзина пуста';
+                }
+            },
+            getCartPrice() {
+                return this.box.reduce(function (price: number, box: {...}) {
+                    return price + box.price * box.count;
+                }, 0);
+            },
+        clearCart(){
+            this.box = [];
+            this.render();
+        },
+        };
+
+        cart.init();
+    </script>
 </body>
 
 </html>
